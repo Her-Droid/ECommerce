@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.dagger.hilt.android") version "2.48.1" apply true
-    id("com.google.devtools.ksp") version "1.9.24-1.0.20" apply true
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.kapt)
 }
 
-apply plugin: 'kotlin-kapt'
 
 android {
     namespace 'id.herdroid.ecommercemandiri'
@@ -50,18 +49,8 @@ android {
     }
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
 kapt {
     correctErrorTypes = true
-}
-
-configurations.all {
-    resolutionStrategy {
-        force 'com.squareup:javapoet:1.13.0'
-    }
 }
 
 dependencies {
@@ -82,16 +71,16 @@ dependencies {
 
     // Hilt
     implementation libs.dagger.hilt.android
-    ksp libs.dagger.hilt.compiler
+    kapt(libs.dagger.hilt.compiler)
 
     // Glide
     implementation libs.glide
-    ksp libs.compiler
+    kapt(libs.compiler)
 
     // Room
     implementation libs.androidx.room.runtime
     implementation libs.androidx.room.ktx
-    ksp libs.androidx.room.compiler
+    kapt(libs.androidx.room.compiler)
 
     // Lifecycle
     implementation libs.androidx.lifecycle.viewmodel.ktx
@@ -107,4 +96,7 @@ dependencies {
     // Chucker
     debugImplementation "com.github.chuckerteam.chucker:library:4.0.0"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:4.0.0"
+
+    implementation libs.javapoet
 }
+
