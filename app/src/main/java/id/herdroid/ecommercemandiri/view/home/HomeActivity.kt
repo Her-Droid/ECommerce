@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import id.herdroid.ecommercemandiri.R
 import id.herdroid.ecommercemandiri.databinding.ActivityHomeBinding
 import id.herdroid.ecommercemandiri.view.adapter.CategoryAdapter
-import id.herdroid.ecommercemandiri.view.adapter.HomePagerAdapter
 import id.herdroid.ecommercemandiri.view.adapter.ProductAdapter
 import id.herdroid.ecommercemandiri.view.cart.CartFragment
 import id.herdroid.ecommercemandiri.view.detail.ProductDetailActivity
@@ -41,12 +40,11 @@ class HomeActivity : AppCompatActivity() {
             viewModel.loadProductsByCategory(category)
         }
 
-        val pagerAdapter = HomePagerAdapter(this)
-        binding.viewPager.adapter = pagerAdapter
+        binding.rvProducts.layoutManager = LinearLayoutManager(this)
+        binding.rvProducts.adapter = productAdapter
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = if (position == 0) "Kategori" else "Produk"
-        }.attach()
+        binding.rvCategories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvCategories.adapter = categoryAdapter
 
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -80,4 +78,5 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel.loadProducts()
     }
+
 }

@@ -36,10 +36,15 @@ class HomeViewModel @Inject constructor(
     fun loadProductsByCategory(category: String) {
         viewModelScope.launch {
             try {
-                _products.value = productUseCase.getProductsByCategory(category)
+                _products.value = if (category.equals("All", true)) {
+                    productUseCase.getAllProducts()
+                } else {
+                    productUseCase.getProductsByCategory(category)
+                }
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "categoryError: ${e.localizedMessage}")
             }
         }
     }
+
 }

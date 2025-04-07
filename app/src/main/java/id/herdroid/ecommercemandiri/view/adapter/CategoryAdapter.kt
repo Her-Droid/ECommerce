@@ -21,9 +21,12 @@ class CategoryAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(category: String) {
             binding.tvCategory.text = category
-            binding.root.setOnClickListener { onClick(category) }
+            binding.root.setOnClickListener {
+                onClick(category)
+            }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)

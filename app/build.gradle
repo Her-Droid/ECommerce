@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
+    id("com.google.gms.google-services")
 }
 
 
@@ -12,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "id.herdroid.ecommercemandiri"
-        minSdk 21
+        minSdk 24
         targetSdk 35
         versionCode 1
         versionName "1.0"
@@ -49,10 +50,6 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
     implementation libs.androidx.core.ktx
     implementation libs.androidx.appcompat
@@ -71,16 +68,16 @@ dependencies {
 
     // Hilt
     implementation libs.dagger.hilt.android
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
 
     // Glide
     implementation libs.glide
-    kapt(libs.compiler)
+    ksp(libs.compiler)
 
     // Room
     implementation libs.androidx.room.runtime
     implementation libs.androidx.room.ktx
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
 
     // Lifecycle
     implementation libs.androidx.lifecycle.viewmodel.ktx
@@ -98,5 +95,12 @@ dependencies {
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:4.0.0"
 
     implementation libs.javapoet
+
+    //Firebase
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.common.ktx)
+    implementation(libs.firebase.analytics.ktx)
+    implementation libs.firebase.database.ktx
+
 }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1040531241676",
+    "project_id": "e-commerce-d682a",
+    "storage_bucket": "e-commerce-d682a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040531241676:android:a9ce71f12f2457742c2069",
+        "android_client_info": {
+          "package_name": "id.herdroid.ecommercemandiri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDssc_k_uT4MMgs-DvkCMdE2suXK30K_2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

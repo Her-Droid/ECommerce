@@ -29,7 +29,7 @@ object AppModule {
         @ApplicationContext context: Context
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(ChuckerInterceptor(context)) // Tambahkan Chucker
+            .addInterceptor(ChuckerInterceptor(context))
             .build()
     }
 

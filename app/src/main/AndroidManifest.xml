@@ -17,9 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerceMandiri"
         tools:targetApi="31">
-        <!-- LoginActivity sebagai launcher (jika login dulu sebelum Home) -->
         <activity
-            android:name=".view.login.LoginActivity"
+            android:name=".view.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,14 +26,16 @@
             </intent-filter>
         </activity>
 
-        <!-- HomeActivity -->
         <activity
             android:name=".view.home.HomeActivity"
             android:exported="false" />
 
-        <!-- Product Detail -->
         <activity
             android:name=".view.detail.ProductDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.auth.RegisterActivity"
             android:exported="false" />
 
     </application>

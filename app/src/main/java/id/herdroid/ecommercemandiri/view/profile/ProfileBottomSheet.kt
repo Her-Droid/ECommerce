@@ -1,11 +1,19 @@
 package id.herdroid.ecommercemandiri.view.profile
 
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import id.herdroid.ecommercemandiri.R
 import id.herdroid.ecommercemandiri.databinding.BottomsheetProfileBinding
+import id.herdroid.ecommercemandiri.view.auth.LoginActivity
 
 class ProfileBottomSheet : BottomSheetDialogFragment() {
     private var _binding: BottomsheetProfileBinding? = null
@@ -22,9 +30,34 @@ class ProfileBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvUsername.text = "Username: user123"
+
+        val prefs = requireContext().getSharedPreferences("user_session", android.content.Context.MODE_PRIVATE)
+        val username = prefs.getString("username", null)
+
+        if (username != null) {
+            val dbRef = FirebaseDatabase.getInstance().getReference("users").child(username)
+            dbRef.get().addOnSuccessListener { snapshot ->
+                val name = snapshot.child("name").value.toString()
+                val imageBase64 = snapshot.child("imageBase64").value?.toString()
+
+                binding.tvUsername.text = "Name: $name"
+
+                if (!imageBase64.isNullOrEmpty()) {
+                    val imageBytes = Base64.decode(imageBase64, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    binding.imgProfile.setImageBitmap(bitmap)
+                } else {
+                    binding.imgProfile.setImageResource(R.drawable.ic_profile)
+                }
+            }
+        }
+
         binding.btnLogout.setOnClickListener {
-            dismiss()
+            FirebaseAuth.getInstance().signOut()
+            val prefs = requireContext().getSharedPreferences("user_session", android.content.Context.MODE_PRIVATE)
+            prefs.edit().clear().apply()
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            activity?.finish()
         }
     }
 
