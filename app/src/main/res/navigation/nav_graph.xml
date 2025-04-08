@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cartFragment">
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="id.herdroid.ecommercemandiri.view.cart.CartFragment"
+        android:label="Cart">
+
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutSummaryFragment"
+            app:destination="@id/checkoutSummaryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/checkoutSummaryFragment"
+        android:name="id.herdroid.ecommercemandiri.view.cart.CheckoutSummaryFragment"
+        android:label="Checkout Summary" />
+
+</navigation>
