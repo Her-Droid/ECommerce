@@ -18,34 +18,43 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Tombol back pada AppBar
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        // Cek session login
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
         val savedUsername = prefs.getString("username", null)
+
+        // Restore field jika activity recreate
         if (savedInstanceState != null) {
             binding.etUsername.setText(savedInstanceState.getString("username"))
             binding.etPassword.setText(savedInstanceState.getString("password"))
         }
+
         if (savedUsername != null) {
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }
+
+        // Tombol Login
         binding.btnLogin.setOnClickListener {
             val inputUsername = binding.etUsername.text.toString().trim()
             val inputPassword = binding.etPassword.text.toString().trim()
 
             if (inputUsername.isNotEmpty() && inputPassword.isNotEmpty()) {
-                // Cek langsung di node users/{username}
                 database.child("users").child(inputUsername)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
                                 val password = snapshot.child("password").getValue(String::class.java)
-
                                 if (inputPassword == password) {
-                                    Toast.makeText(this@LoginActivity, "Login sukses", Toast.LENGTH_SHORT).show()
-
-                                    val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+                                    val userId = snapshot.child("userId").getValue(Int::class.java) ?: -1
                                     prefs.edit().putString("username", inputUsername).apply()
-
+                                    prefs.edit().putInt("user_id", userId).apply()
+                                    prefs.edit().putBoolean("has_seen_onboarding", true).apply()
+                                    Toast.makeText(this@LoginActivity, "Login sukses", Toast.LENGTH_SHORT).show()
                                     startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                                     finish()
                                 } else {
@@ -63,10 +72,9 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 showError("Field tidak boleh kosong")
             }
-
         }
 
-
+        // Pindah ke halaman register
         binding.tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
@@ -82,5 +90,4 @@ class LoginActivity : AppCompatActivity() {
         outState.putString("username", binding.etUsername.text.toString())
         outState.putString("password", binding.etPassword.text.toString())
     }
-
 }

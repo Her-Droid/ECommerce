@@ -10,7 +10,9 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
+import id.herdroid.ecommercemandiri.R
 import id.herdroid.ecommercemandiri.databinding.ActivityRegisterBinding
 import java.io.ByteArrayOutputStream
 
@@ -25,11 +27,16 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.imgProfile.setOnClickListener {
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.tvUploadImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             intent.type = "image/*"
             startActivityForResult(intent, IMAGE_REQUEST_CODE)
         }
+
 
         binding.btnRegister.setOnClickListener {
             val username = binding.etUsername.text.toString().trim()
@@ -56,6 +63,9 @@ class RegisterActivity : AppCompatActivity() {
                         database.child("users").child(username).setValue(userData)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
+                                    val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+                                    prefs.edit().putBoolean("has_seen_onboarding", true).apply()
+
                                     Toast.makeText(this, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
                                     startActivity(Intent(this, LoginActivity::class.java))
                                     finish()
@@ -112,7 +122,13 @@ class RegisterActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             selectedImageUri = data?.data
-            binding.imgProfile.setImageURI(selectedImageUri)
+            selectedImageUri?.let {
+                Glide.with(this)
+                    .load(R.drawable.ic_upload_profile)
+                    .circleCrop()
+                    .into(binding.imgProfile)
+            }
         }
     }
+
 }

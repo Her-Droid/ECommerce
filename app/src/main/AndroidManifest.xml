@@ -18,26 +18,30 @@
         android:theme="@style/Theme.ECommerceMandiri"
         tools:targetApi="31">
         <activity
-            android:name=".view.auth.LoginActivity"
+            android:name=".view.landing.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".view.home.HomeActivity"
+            android:name=".view.landing.OnboardingActivity"
             android:exported="false" />
-
-        <activity
-            android:name=".view.detail.ProductDetailActivity"
-            android:exported="false" />
-
         <activity
             android:name=".view.auth.RegisterActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".view.auth.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.home.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.detail.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.cart.CheckoutSummaryActivity"
+            android:exported="false" />
     </application>
-
 </manifest>

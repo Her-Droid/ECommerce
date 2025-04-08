@@ -1,21 +1,24 @@
 package id.herdroid.ecommercemandiri.view.cart
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import id.herdroid.ecommercemandiri.R
 import id.herdroid.ecommercemandiri.databinding.FragmentCartBinding
 import id.herdroid.ecommercemandiri.view.adapter.CartAdapter
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CartFragment : BottomSheetDialogFragment() {
+class CartFragment : Fragment() {
     private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CartViewModel by viewModels()
@@ -31,7 +34,11 @@ class CartFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+        binding.topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
 
         cartAdapter = CartAdapter(
             onIncrease = { item -> viewModel.increaseQuantity(item) },
@@ -45,15 +52,21 @@ class CartFragment : BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
                 viewModel.cart.collect { list ->
-                    cartAdapter.submitList(list)
+                    cartAdapter.submitList(list.toList())
                     val total = list.sumOf { it.price * it.quantity }
-                    binding.tvTotal.text = "Total: $${String.format("%.2f", total)}"
+                    binding.tvTotal.text = "Total Shopping: Rp${String.format("%.2f", total)}"
                 }
             }
         }
 
         binding.btnCheckout.setOnClickListener {
-            viewModel.checkout()
+            val intent = Intent(requireContext(), CheckoutSummaryActivity::class.java)
+            startActivity(intent)
+
+        }
+
+        binding.btnHapusSemua.setOnClickListener {
+            viewModel.clearCart()
         }
     }
 

@@ -1,6 +1,7 @@
 package id.herdroid.ecommercemandiri.data.api
 
 import id.herdroid.ecommercemandiri.data.model.ProductResponse
+import id.herdroid.ecommercemandiri.domain.model.Cart
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -16,4 +17,7 @@ interface ApiService {
 
     @GET("products/{id}")
     suspend fun getProductDetail(@Path("id") id: Int): ProductResponse
+
+    @GET("carts")
+    suspend fun getAllCarts(): List<Cart>
 }

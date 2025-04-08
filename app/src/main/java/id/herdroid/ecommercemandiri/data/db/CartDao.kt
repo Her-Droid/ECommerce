@@ -2,6 +2,8 @@ package id.herdroid.ecommercemandiri.data.db
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+
 
 @Dao
 interface CartDao {
@@ -19,4 +21,12 @@ interface CartDao {
 
     @Query("DELETE FROM cart")
     suspend fun clearCart()
+
+    @Query("SELECT * FROM cart WHERE id = :userId")
+    fun getUserCart(userId: Int): Flow<List<CartEntity>> // pakai di ViewModel
+
+    // Di repository atau usecase kamu bisa kasih .distinctUntilChanged()
+    fun getUserCartDistinct(userId: Int): Flow<List<CartEntity>> {
+        return getUserCart(userId).distinctUntilChanged()
+    }
 }

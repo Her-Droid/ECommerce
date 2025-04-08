@@ -2,9 +2,14 @@ package id.herdroid.ecommercemandiri.view.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,11 +29,18 @@ class HomeActivity : AppCompatActivity() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var productAdapter: ProductAdapter
     private lateinit var categoryAdapter: CategoryAdapter
-
+    private var selectedCategory: String = "All"
+    private var cartBadgeText: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+        if (!prefs.getBoolean("has_seen_onboarding", false)) {
+            prefs.edit().putBoolean("has_seen_onboarding", true).apply()
+        }
+
+        setSupportActionBar(binding.topAppBar)
 
         productAdapter = ProductAdapter { product ->
             val intent = Intent(this, ProductDetailActivity::class.java)
@@ -37,23 +49,27 @@ class HomeActivity : AppCompatActivity() {
         }
 
         categoryAdapter = CategoryAdapter { category ->
-            viewModel.loadProductsByCategory(category)
+            selectedCategory = category
+            categoryAdapter.setSelectedCategory(category)
+            if (category == "All") {
+                viewModel.loadProducts()
+            } else {
+                viewModel.loadProductsByCategory(category)
+            }
         }
 
-        binding.rvProducts.layoutManager = LinearLayoutManager(this)
+
+        binding.rvProducts.layoutManager = GridLayoutManager(this, 2)
         binding.rvProducts.adapter = productAdapter
 
         binding.rvCategories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvCategories.adapter = categoryAdapter
 
+
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_home -> {
                     viewModel.loadProducts()
-                    true
-                }
-                R.id.menu_cart -> {
-                    CartFragment().show(supportFragmentManager, "CartFragment")
                     true
                 }
                 R.id.menu_profile -> {
@@ -72,11 +88,48 @@ class HomeActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.categories.collectLatest { categories ->
-                categoryAdapter.submitList(categories)
+                val allCategories = mutableListOf("All")
+                allCategories.addAll(categories)
+                categoryAdapter.submitList(allCategories)
+
+                // Trigger default selection
+                viewModel.loadProducts()
+                categoryAdapter.setSelectedCategory("All")
             }
         }
 
         viewModel.loadProducts()
+
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_bar_menu, menu)
+        val menuItem = menu?.findItem(R.id.menu_cart)
+        val actionView = menuItem?.actionView ?: layoutInflater.inflate(R.layout.cart_action_view, null)
+        menuItem?.actionView = actionView
+
+        if (menuItem != null) {
+            actionView.setOnClickListener {
+                onOptionsItemSelected(menuItem)
+            }
+        }
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_cart -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(android.R.id.content, CartFragment())
+                    .addToBackStack(null)
+                    .commit()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
 
 }

@@ -33,24 +33,47 @@ class ProfileBottomSheet : BottomSheetDialogFragment() {
 
         val prefs = requireContext().getSharedPreferences("user_session", android.content.Context.MODE_PRIVATE)
         val username = prefs.getString("username", null)
-
         if (username != null) {
             val dbRef = FirebaseDatabase.getInstance().getReference("users").child(username)
+
+            binding.progressBar.visibility = View.VISIBLE
+
             dbRef.get().addOnSuccessListener { snapshot ->
-                val name = snapshot.child("name").value.toString()
-                val imageBase64 = snapshot.child("imageBase64").value?.toString()
+                _binding?.let { binding ->
+                    val name = snapshot.child("name").value.toString()
+                    val imageBase64 = snapshot.child("imageBase64").value?.toString()
+                    val username = snapshot.child("username").value.toString()
 
-                binding.tvUsername.text = "Name: $name"
+                    binding.tvName.text = "Name : $name"
+                    binding.tvUsername.text = "Username: $username"
 
-                if (!imageBase64.isNullOrEmpty()) {
-                    val imageBytes = Base64.decode(imageBase64, Base64.DEFAULT)
-                    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                    binding.imgProfile.setImageBitmap(bitmap)
-                } else {
-                    binding.imgProfile.setImageResource(R.drawable.ic_profile)
+                    if (!imageBase64.isNullOrEmpty()) {
+                        val imageBytes = Base64.decode(imageBase64, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        Glide.with(requireContext())
+                            .asBitmap()
+                            .load(bitmap)
+                            .circleCrop()
+                            .into(binding.imgProfile)
+                    } else {
+                        binding.imgProfile.setImageResource(R.drawable.ic_profile_blue)
+                    }
+
+                    binding.root.alpha = 0f
+                    binding.root.animate()
+                        .alpha(1f)
+                        .setDuration(300)
+                        .start()
+
+                    // Sembunyikan loading setelah data ditampilkan
+                    binding.progressBar.visibility = View.GONE
                 }
+            }.addOnFailureListener {
+                // Sembunyikan loading jika error
+                _binding?.progressBar?.visibility = View.GONE
             }
         }
+
 
         binding.btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()

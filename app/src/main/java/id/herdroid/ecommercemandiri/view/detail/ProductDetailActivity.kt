@@ -1,6 +1,7 @@
 package id.herdroid.ecommercemandiri.view.detail
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -22,6 +23,10 @@ class ProductDetailActivity : AppCompatActivity() {
         binding = ActivityProductDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         val productId = intent.getIntExtra("product_id", -1)
         if (productId != -1) {
             viewModel.loadProductDetail(productId)
@@ -40,8 +45,19 @@ class ProductDetailActivity : AppCompatActivity() {
                     Glide.with(this@ProductDetailActivity).load(it.image).into(binding.ivProduct)
 
                     binding.btnAddToCart.setOnClickListener {
-                        viewModel.addToCart(product)
+                        binding.btnAddToCart.isEnabled = false
+                        binding.btnAddToCart.text = "Loading..."
+
+                        lifecycleScope.launch {
+                            viewModel.addToCart(product)
+                            Toast.makeText(this@ProductDetailActivity, "Product Successfully Added to Cart", Toast.LENGTH_SHORT).show()
+
+                            // Reset button state
+                            binding.btnAddToCart.isEnabled = true
+                            binding.btnAddToCart.text = "Add To Cart"
+                        }
                     }
+
                 }
             }
         }

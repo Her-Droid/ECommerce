@@ -29,19 +29,21 @@ class CartViewModel @Inject constructor(
 
     fun increaseQuantity(item: CartEntity) {
         viewModelScope.launch {
-            item.quantity++
-            repository.updateItem(item)
+            val updatedItem = item.copy(quantity = item.quantity + 1)
+            repository.updateCartItem(updatedItem)
         }
     }
 
     fun decreaseQuantity(item: CartEntity) {
-        viewModelScope.launch {
-            if (item.quantity > 1) {
-                item.quantity--
-                repository.updateItem(item)
+        if (item.quantity > 1) {
+            viewModelScope.launch {
+                val updatedItem = item.copy(quantity = item.quantity - 1)
+                repository.updateCartItem(updatedItem)
             }
         }
     }
+
+
 
     fun removeFromCart(item: CartEntity) {
         viewModelScope.launch {
@@ -49,9 +51,12 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun checkout() {
+
+
+    fun clearCart() {
         viewModelScope.launch {
             repository.clearCart()
         }
     }
+
 }

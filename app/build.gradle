@@ -102,5 +102,7 @@ dependencies {
     implementation(libs.firebase.analytics.ktx)
     implementation libs.firebase.database.ktx
 
+    implementation libs.dotsindicator
+
 }
 

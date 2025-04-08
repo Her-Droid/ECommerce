@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import id.herdroid.ecommercemandiri.data.db.CartEntity
 import id.herdroid.ecommercemandiri.databinding.ItemCartBinding
 
@@ -18,6 +19,10 @@ class CartAdapter(
             binding.tvTitle.text = item.title
             binding.tvPrice.text = "$${item.price}"
             binding.tvQuantity.text = item.quantity.toString()
+
+            Glide.with(binding.imgProduct.context)
+                .load(item.image)
+                .into(binding.imgProduct)
 
             binding.btnIncrease.setOnClickListener { onIncrease(item) }
             binding.btnDecrease.setOnClickListener { onDecrease(item) }

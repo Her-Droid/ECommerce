@@ -1,6 +1,7 @@
 package id.herdroid.ecommercemandiri.view.home
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val productUseCase: ProductUseCase
 ) : ViewModel() {
+
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products
@@ -46,5 +48,10 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+
+
+
+
 
 }
