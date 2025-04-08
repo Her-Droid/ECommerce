@@ -18,16 +18,13 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Tombol back pada AppBar
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        // Cek session login
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
         val savedUsername = prefs.getString("username", null)
 
-        // Restore field jika activity recreate
         if (savedInstanceState != null) {
             binding.etUsername.setText(savedInstanceState.getString("username"))
             binding.etPassword.setText(savedInstanceState.getString("password"))
@@ -38,7 +35,6 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        // Tombol Login
         binding.btnLogin.setOnClickListener {
             val inputUsername = binding.etUsername.text.toString().trim()
             val inputPassword = binding.etPassword.text.toString().trim()
@@ -74,7 +70,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Pindah ke halaman register
         binding.tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }

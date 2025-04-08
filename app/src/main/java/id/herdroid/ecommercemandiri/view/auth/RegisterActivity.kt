@@ -97,7 +97,6 @@ class RegisterActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeStream(inputStream)
         inputStream?.close()
 
-        // Ambil orientasi
         val filePathColumn = arrayOf(MediaStore.Images.Media.ORIENTATION)
         val cursor = contentResolver.query(uri, filePathColumn, null, null, null)
         var rotation = 0

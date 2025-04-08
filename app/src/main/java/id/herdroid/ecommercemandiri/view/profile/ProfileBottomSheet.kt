@@ -65,11 +65,9 @@ class ProfileBottomSheet : BottomSheetDialogFragment() {
                         .setDuration(300)
                         .start()
 
-                    // Sembunyikan loading setelah data ditampilkan
                     binding.progressBar.visibility = View.GONE
                 }
             }.addOnFailureListener {
-                // Sembunyikan loading jika error
                 _binding?.progressBar?.visibility = View.GONE
             }
         }

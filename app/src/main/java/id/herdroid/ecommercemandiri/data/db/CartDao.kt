@@ -23,9 +23,8 @@ interface CartDao {
     suspend fun clearCart()
 
     @Query("SELECT * FROM cart WHERE id = :userId")
-    fun getUserCart(userId: Int): Flow<List<CartEntity>> // pakai di ViewModel
+    fun getUserCart(userId: Int): Flow<List<CartEntity>>
 
-    // Di repository atau usecase kamu bisa kasih .distinctUntilChanged()
     fun getUserCartDistinct(userId: Int): Flow<List<CartEntity>> {
         return getUserCart(userId).distinctUntilChanged()
     }

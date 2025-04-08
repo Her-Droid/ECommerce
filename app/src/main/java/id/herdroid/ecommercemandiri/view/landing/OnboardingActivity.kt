@@ -27,14 +27,11 @@ class OnboardingActivity : AppCompatActivity() {
         val adapter = OnboardingAdapter(onboardingItems)
         binding.onboardingViewPager.adapter = adapter
         binding.indicator.setViewPager2(binding.onboardingViewPager)
-
-        // Set saat user klik register
         binding.btnRegister.setOnClickListener {
             setOnboardingSeen()
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        // Set saat user klik login
         binding.btnLogin.setOnClickListener {
             setOnboardingSeen()
             startActivity(Intent(this, LoginActivity::class.java))

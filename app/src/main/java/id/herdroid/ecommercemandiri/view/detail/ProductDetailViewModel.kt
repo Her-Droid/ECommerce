@@ -27,7 +27,7 @@ class ProductDetailViewModel @Inject constructor(
                 val detail = productUseCase.getProductDetail(id)
                 _product.value = detail
             } catch (e: Exception) {
-                // Log error atau state error di UI
+
             }
         }
     }

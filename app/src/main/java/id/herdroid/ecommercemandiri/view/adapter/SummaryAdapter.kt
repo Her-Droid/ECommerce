@@ -16,11 +16,10 @@ class SummaryAdapter : ListAdapter<CartEntity, SummaryAdapter.SummaryViewHolder>
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CartEntity) {
             binding.tvTitle.text = item.title
-            binding.tvPrice.text = "Rp ${item.price}"
+            binding.tvPrice.text = "$ ${item.price}"
             binding.tvQuantity.text = item.quantity.toString()
             Glide.with(binding.imgProduct.context).load(item.image).into(binding.imgProduct)
 
-            // Sembunyikan tombol yang tidak diperlukan
             binding.btnIncrease.visibility = View.GONE
             binding.btnDecrease.visibility = View.GONE
             binding.btnDelete.visibility = View.GONE

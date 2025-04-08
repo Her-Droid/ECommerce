@@ -25,6 +25,11 @@ class CheckoutSummaryActivity : AppCompatActivity() {
         binding = ActivityCheckoutSummaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         adapter = SummaryAdapter()
         binding.rvSummary.adapter = adapter
         binding.rvSummary.layoutManager = LinearLayoutManager(this)
@@ -33,7 +38,7 @@ class CheckoutSummaryActivity : AppCompatActivity() {
             viewModel.cart.collect { list ->
                 adapter.submitList(list)
                 val total = list.sumOf { it.price * it.quantity }
-                binding.tvTotalSummary.text = "Total: Rp${String.format("%.2f", total)}"
+                binding.tvTotalSummary.text = "Total Shopping: $ ${String.format("%.2f", total)}"
 
                 binding.btnOrderWhatsapp.setOnClickListener {
                     val message = buildWhatsAppMessage(list, total)
@@ -45,11 +50,11 @@ class CheckoutSummaryActivity : AppCompatActivity() {
 
     private fun buildWhatsAppMessage(cart: List<CartEntity>, total: Double): String {
         val builder = StringBuilder()
-        builder.append("Halo, saya ingin melakukan pemesanan:\n")
+        builder.append("Hello I would like to place an order:\n")
         cart.forEach {
-            builder.append("- ${it.title} (${it.quantity}x) = Rp${String.format("%.2f", it.price * it.quantity)}\n")
+            builder.append("- ${it.title} (${it.quantity}x) = ${String.format("%.2f", it.price * it.quantity)}\n")
         }
-        builder.append("\nTotal: Rp${String.format("%.2f", total)}")
+        builder.append("\nTotal Shopping: ${String.format("%.2f", total)}")
         return builder.toString()
     }
 

@@ -33,13 +33,12 @@ class ProductAdapter(
     }
 }
 
-// DiffUtil agar ListAdapter bisa bedakan perubahan data
 class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
     override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem.id == newItem.id // bandingkan berdasarkan ID produk
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem == newItem // jika seluruh isi produk sama
+        return oldItem == newItem
     }
 }

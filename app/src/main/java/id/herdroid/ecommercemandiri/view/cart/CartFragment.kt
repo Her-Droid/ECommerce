@@ -54,7 +54,7 @@ class CartFragment : Fragment() {
                 viewModel.cart.collect { list ->
                     cartAdapter.submitList(list.toList())
                     val total = list.sumOf { it.price * it.quantity }
-                    binding.tvTotal.text = "Total Shopping: Rp${String.format("%.2f", total)}"
+                    binding.tvTotal.text = "Total Shopping: $ ${String.format("%.2f", total)}"
                 }
             }
         }

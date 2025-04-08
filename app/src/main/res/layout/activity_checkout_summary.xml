@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <TextView
-        android:text="Checkout Summary"
-        android:textStyle="bold"
-        android:textSize="18sp"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp" />
+        android:background="@color/white"
+        app:title="Checkout Summary"
+        app:titleCentered="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:titleTextColor="@android:color/black"
+        android:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_arrow_back" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSummary"
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -24,6 +32,7 @@
         android:id="@+id/tvTotalSummary"
         android:text="Total:"
         android:textStyle="bold"
+        android:padding="16dp"
         android:textSize="16sp"
         android:layout_marginVertical="8dp"
         android:layout_width="match_parent"
@@ -34,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Order via WhatsApp"
+        android:padding="16dp"
         android:backgroundTint="@android:color/holo_green_dark"
         android:textColor="@android:color/white" />
 </LinearLayout>

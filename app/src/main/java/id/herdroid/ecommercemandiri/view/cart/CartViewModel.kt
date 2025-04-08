@@ -44,13 +44,11 @@ class CartViewModel @Inject constructor(
     }
 
 
-
     fun removeFromCart(item: CartEntity) {
         viewModelScope.launch {
             repository.removeItem(item)
         }
     }
-
 
 
     fun clearCart() {

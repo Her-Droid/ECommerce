@@ -92,7 +92,6 @@ class HomeActivity : AppCompatActivity() {
                 allCategories.addAll(categories)
                 categoryAdapter.submitList(allCategories)
 
-                // Trigger default selection
                 viewModel.loadProducts()
                 categoryAdapter.setSelectedCategory("All")
             }

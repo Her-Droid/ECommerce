@@ -18,6 +18,4 @@ interface ApiService {
     @GET("products/{id}")
     suspend fun getProductDetail(@Path("id") id: Int): ProductResponse
 
-    @GET("carts")
-    suspend fun getAllCarts(): List<Cart>
 }

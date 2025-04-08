@@ -21,15 +21,12 @@ class SplashActivity : AppCompatActivity() {
 
             when {
                 savedUsername != null -> {
-                    // Sudah login -> langsung ke Home
                     startActivity(Intent(this, HomeActivity::class.java))
                 }
                 hasSeenOnboarding -> {
-                    // Sudah lihat onboarding, belum login -> ke Login
                     startActivity(Intent(this, LoginActivity::class.java))
                 }
                 else -> {
-                    // Belum lihat onboarding
                     startActivity(Intent(this, OnboardingActivity::class.java))
                 }
             }

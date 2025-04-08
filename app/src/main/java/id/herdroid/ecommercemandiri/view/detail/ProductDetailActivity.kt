@@ -52,7 +52,6 @@ class ProductDetailActivity : AppCompatActivity() {
                             viewModel.addToCart(product)
                             Toast.makeText(this@ProductDetailActivity, "Product Successfully Added to Cart", Toast.LENGTH_SHORT).show()
 
-                            // Reset button state
                             binding.btnAddToCart.isEnabled = true
                             binding.btnAddToCart.text = "Add To Cart"
                         }
